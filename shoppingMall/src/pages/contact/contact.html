@@ -11,6 +11,7 @@
   <ion-card *ngFor="let card of stores">
     <ion-card-content>
       <img src="../../assets/images/{{card.url}}" class="storeLogo">
+      <button [navPush]='allOffers'>See Offers</button>
     </ion-card-content>
 
   </ion-card>

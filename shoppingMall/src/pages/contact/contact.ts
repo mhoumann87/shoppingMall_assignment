@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AllOffers } from '../all-offers/all-offers';
 
 const data = [{
     name: 'Glitter',
@@ -29,6 +30,7 @@ const data = [{
 })
 
 export class ContactPage {
+  allOffers = AllOffers;
   stores : any;
   constructor(public navCtrl: NavController) {
     this.stores = data;

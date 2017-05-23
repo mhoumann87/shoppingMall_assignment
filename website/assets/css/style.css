@@ -66,3 +66,8 @@ header {
 .padding {
     padding-bottom: 10px;
 }
+
+.err {
+    color: #FF0000;
+    font-weight: bold;
+}
