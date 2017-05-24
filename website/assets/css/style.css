@@ -71,3 +71,8 @@ header {
     color: #FF0000;
     font-weight: bold;
 }
+
+.success {
+    color: #00FF00;
+    font-weight: bold;
+}
