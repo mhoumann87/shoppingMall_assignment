@@ -39,25 +39,36 @@
                         $errors = 'No Password';
                     }
 
-echo date();
                     if (empty($errors)) {
 
                         $sql = "SELECT * FROM users WHERE name='{$username}' AND password = '{$password}'";
                         $result = mysqli_query($conn, $sql);
 
-                        echo mysqli_num_rows($result);
+                        if (mysqli_num_rows($result) == 1) {
 
-                       if (mysqli_num_rows($result) == 1) {
-                            $store = mysqli_fetch_assoc($result);
+                            $users = mysqli_fetch_assoc($result);
 
-                            $_SESSIONS['storenumber'] = $store['storenumber'];
-                            redirect('store.php');
+                        if ($users['storenumber'] != NULL) {
+
+                            $_SESSION['id'] = $users['storenumber'];
+
+                            if ($users['created_at'] === $users['updated_at']) {
+                                redirect('change_password.php?r=1');
+                            } else {
+                                redirect('store.php');
+                            }
+
 
                         } else {
-                            $message = 'Username and password do not match';
-                        }
+                            $_SESSION['id'] = 'Admin';
+                            redirect('create_user.php');
+                        }// if storenumber
 
-                    }
+                        }//num rows
+
+
+
+                    }//empty errors
 
                 }//submit
 

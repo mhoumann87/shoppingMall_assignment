@@ -119,11 +119,14 @@
 
                             $sql = "INSERT INTO offer (store_number, offer_photo, offer_title, offer_description, offer_normalprice, offer_price, created_at, updated_at) VALUES ('{$store_number}', '{$offer_photo}', '{$offer_title}','{$offer_description}', '{$offer_normalprice}', '{$offer_price}', '{$created_at}', '{$updated_at}')";
                             $result = mysqli_query($conn, $sql);
-                            echo $sql;
+
                             if ($result) {
-                                $message = '<p class="success">The offer is uploaded</p>';
+                                $message = '<span class="success">The offer is uploaded</span>';
+                                $offer_title = '';
+                                $offer_normalprice = '';
+                                $offer_price = '';
                             } else {
-                                $message = '<p class="err">Something went wrong, offer not uploaded. Try again</p>';
+                                $message = '<span class="err">Something went wrong, offer not uploaded. Try again</span>';
                             }//upload
                         } else {
                             $up_err = $_FILES['fileUpload']['error'];
@@ -133,7 +136,7 @@
 
                     } else {
 
-                        $message = '<p class="err">You have to correct the errors</p>';
+                        $message = '<span class="err">You have to correct the errors</span>';
 
                     }//empty error
 
@@ -146,20 +149,20 @@
                 <form action="offer.php" method="post" enctype="multipart/form-data">
 
                     <p><label>Title</label><span class="err"><?php echo $title_err; ?></span></p>
-                    <p><input type="text" name="title" size="50" placeholder="<?php echo ($offer_title !='') ? $offer_title :  'Title';?>"></p>
+                    <p><input type="text" name="title" size="50" placeholder="Title" value="<?php echo ($offer_title !='') ? $offer_title :  '';?>"></p>
                     <p><label>Regular Price</label><span class="err"><?php echo $normal_err; ?></span></p>
-                    <p><input type="text" name="regPrice" size="50" placeholder="<?php echo ($offer_normalprice !='') ? $offer_normalprice :  'Regular Price';?>"></p>
+                    <p><input type="text" name="regPrice" size="50" placeholder="Regular Price" value="<?php echo ($offer_normalprice !='') ? $offer_normalprice :  '';?>"></p>
                     <p><label>Offer Price</label><span class="err"><?php echo $offer_err; ?></span></p>
-                    <p><input type="text" name="offerPrice" size="50" placeholder="<?php echo ($offer_price !='') ? $offer_price :  'Offer Price';?>"></p>
+                    <p><input type="text" name="offerPrice" size="50" placeholder="Offer Price" value="<?php echo ($offer_price !='') ? $offer_price :  '';?>"></p>
                     <p><label>Description</label><span class="err"><?php echo $desc_err; ?></span></p>
-                    <p><textarea name="description" cols="51" rows="10" placeholder="<?php echo ($offer_description !='') ? $offer_description :  'Description';?>"></textarea></p>
+                    <p><textarea name="description" cols="51" rows="10" placeholder="Description"></textarea></p>
                     <p><label>Upload Photo max. 500kb</label><span class="err"><?php echo $img_err; ?></span></p>
                     <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_filesize; ?>">
                     <input type="file" name="fileUpload">
                     <br>
                     <p><button class="btn btn-primary" name="submit">Add Offer</button>
                 </form>
-                <?php echo $message; ?>
+                <p><?php echo $message; ?></p>
                 
 
             </div>

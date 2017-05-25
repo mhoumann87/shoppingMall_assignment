@@ -36,12 +36,21 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="index.php">Login<span class="sr-only">(current)</span></a></li>
-                    <li><a href="store.php">Store Info</a></li>
-                    <li><a href="offer.php">Add Offer</a></li>
+                    <?php echo (isset($_SESSION['id']) && $_SESSION['id'] != 'Admin') ?
+                    '<li><a href="store.php">Store Info</a></li>' : ''; ?>
+                    <?php echo (isset($_SESSION['id']) && $_SESSION['id'] != 'Admin') ?
+                    '<li><a href="offer.php">Add Offer</a></li>' : ''; ?>
+                    <?php echo (isset($_SESSION['id']) && $_SESSION['id'] === 'Admin') ?
+                        '<li><a href="create_user.php">Create User</a></li>' : ''; ?>
+                    <?php echo (isset($_SESSION['id'])) ?
+                    '<li><a href="change_password.php">Change Password</a></li>' : '';?>
+
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Logout</a></li>
-                </ul>
+                <?php echo (isset($_SESSION['id'])) ?
+                 '<ul class="nav navbar-nav navbar-right">
+                    <li><a href="logout.php">Logout</a></li>
+                </ul>' : ''; ?>
+
             </div>
         </div>
     </nav>
