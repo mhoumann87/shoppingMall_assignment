@@ -17,7 +17,7 @@ class CreateStoresTable extends Migration
             $table->increments('store_id');
             $table->integer('store_number')->unique();
             $table->string('store_name');
-            $table->binary('store_logo');
+            $table->string('store_logo');
             $table->string('store_phoneno');
             $table->string('store_website');
             $table->string('store_event')->nullable();

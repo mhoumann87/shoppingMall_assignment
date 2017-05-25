@@ -17,7 +17,7 @@ class CreateOfferTable extends Migration
             $table->increments('offer_id');
             $table->integer('store_number')->unsigned();
             $table->foreign('store_number')->references('offer_id')->on('store');
-            $table->binary('offer_photo');
+            $table->string('offer_photo');
             $table->string('offer_title');
             $table->string('offer_description');
             $table->string('offer_normalprice');
