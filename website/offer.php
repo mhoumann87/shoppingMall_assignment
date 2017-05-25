@@ -38,7 +38,7 @@
                    $offer_normalprice = trim($_POST['regPrice']);
                    $offer_normalprice = filter_var($offer_normalprice, FILTER_SANITIZE_STRING);
 
-                   if (!preg_match('/^[0-9]*\,[0-9]{2}$/', $offer_normalprice) || $offer_normalprice == '') {
+                   if (!preg_match('/^[0-9]*\.[0-9]{2}$/', $offer_normalprice) || $offer_normalprice == '') {
                         $normal_err = ' You must add a valid price';
                         $error = 'No normal price';
                    }
@@ -46,7 +46,7 @@
                    $offer_price = trim($_POST['offerPrice']);
                    $offer_price = filter_var($offer_price, FILTER_SANITIZE_STRING);
 
-                   if (!preg_match('/^[0-9]*\,[0-9]{2}$/', $offer_price) || $offer_price == '') {
+                   if (!preg_match('/^[0-9]*\.[0-9]{2}$/', $offer_price) || $offer_price == '') {
                        $offer_err = ' You must add a valid price';
                        $error = 'No offer price';
                    }
