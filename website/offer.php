@@ -25,8 +25,23 @@
                 $img_err ='';
                 $message = '';
 
+
+                $upload_errors = array(
+                    // http://www.php.net/manual/en/features.file-upload.errors.php
+                    UPLOAD_ERR_OK 			=> "No errors.",
+                    UPLOAD_ERR_INI_SIZE  	=> "Larger than upload_max_filesize.",
+                    UPLOAD_ERR_FORM_SIZE 	=> "Larger than form MAX_FILE_SIZE.",
+                    UPLOAD_ERR_PARTIAL 		=> "Partial upload.",
+                    UPLOAD_ERR_NO_FILE 		=> "No file.",
+                    UPLOAD_ERR_NO_TMP_DIR   => "No temporary directory.",
+                    UPLOAD_ERR_CANT_WRITE   => "Can't write to disk.",
+                    UPLOAD_ERR_EXTENSION 	=> "File upload stopped by extension."
+                );
+
+
                 if (isset($_POST['submit'])) {
 
+                    //Title
                    $offer_title = trim($_POST['title']);
                    $offer_title = filter_var($offer_title, FILTER_SANITIZE_STRING);
 
@@ -35,6 +50,7 @@
                        $error = 'No title';
                    }
 
+                    //Normal Price
                    $offer_normalprice = trim($_POST['regPrice']);
                    $offer_normalprice = filter_var($offer_normalprice, FILTER_SANITIZE_STRING);
 
@@ -43,6 +59,7 @@
                         $error = 'No normal price';
                    }
 
+                   //Offer price
                    $offer_price = trim($_POST['offerPrice']);
                    $offer_price = filter_var($offer_price, FILTER_SANITIZE_STRING);
 
@@ -51,6 +68,7 @@
                        $error = 'No offer price';
                    }
 
+                   //Description
                    $offer_description = trim($_POST['description']);
                    $offer_description = filter_var($offer_description, FILTER_SANITIZE_STRING);
 
@@ -59,42 +77,68 @@
                        $error = 'No description';
                    }
 
+
+
+                   //Photo upload
+                    $temp_file = $_FILES['fileUpload']['tmp_name'];
+                    $target_file = basename($_FILES['fileUpload']['name']);
+                    $target_dir = './assets/images/store_no_'.$store_number.'_uploads';
+                    $offer_photo = $target_dir.'/'.$target_file;
+
                     $image_size = $_FILES['fileUpload']['size'];
-                    $image_type = $_FILES['fileUpload']['type'];
+                    $image_type = pathinfo($target_file, PATHINFO_EXTENSION);
+
+                    echo $image_type;
+
+                    if (file_exists($offer_photo)) {
+                        $img_err = ' An image with that name already exsits';
+                        $error = 'Image exists';
+                    }
+
+                    if ($image_type != 'gif' && $image_type != 'jpeg' && $image_type != 'png' && $image_type != 'jpg') {
+                        $img_err = 'The file type must be gif, jpg or png';
+                        $error = 'Wrong file type';
+                    }
+
+                    if (empty($_FILES['fileUpload']['name'])) {
+                        $img_err = ' You must add a photo';
+                        $error = 'No photo';
+                    }
 
 
-                    if (empty($_FILES['fileUpload']['name'])){
-                        $img_err = 'You must add an image';
-                        $error = 'Image to large';
-                    } else {
-                        if($image_size > $max_filesize) {
-                            $img_err = 'The selected image is too big';
-                            $error = 'Image to large';
-                        } else {
-                            if($image_type === 'image/gif' || $image_type === 'image/jpeg' || $image_type === 'image/png') {
-                                $offer_photo = addslashes(file_get_contents($_FILES['fileUpload']['tmp_name']));
-                            } else {
-                                $img_err = 'The file type must be gif, jpg or png';
-                            }//image type
-                        }//Image size
-                    }//image empty
+                    //Date stamps
+                    $created_at = date('Y-m-d H:i:s');
+                    $updated_at = date('Y-m-d H:i:s');
+
+
 
 
                     if(empty($error)) {
 
-                        $sql = "INSERT INTO offer (store_number, offer_photo, offer_title, offer_description, offer_normalprice, offer_price) VALUES ('{$store_number}', '{$offer_photo}', '{$offer_title}','{$offer_description}', '{$offer_normalprice}', '{$offer_price}')";
-                        $result = mysqli_query($conn, $sql);
+                        if (move_uploaded_file($temp_file, $offer_photo)) {
 
-                            if($result) {
+                            $sql = "INSERT INTO offer (store_number, offer_photo, offer_title, offer_description, offer_normalprice, offer_price, created_at, updated_at) VALUES ('{$store_number}', '{$offer_photo}', '{$offer_title}','{$offer_description}', '{$offer_normalprice}', '{$offer_price}', '{$created_at}', '{$updated_at}')";
+                            $result = mysqli_query($conn, $sql);
+                            echo $sql;
+                            if ($result) {
                                 $message = '<p class="success">The offer is uploaded</p>';
                             } else {
                                 $message = '<p class="err">Something went wrong, offer not uploaded. Try again</p>';
                             }//upload
+                        } else {
+                            $up_err = $_FILES['fileUpload']['error'];
+                            $message = $upload_errors[$up_err];
+                        }//move file
+
+
                     } else {
+
                         $message = '<p class="err">You have to correct the errors</p>';
-                    }
+
+                    }//empty error
 
                 }//isset submit
+
 
 
                 ?>
@@ -110,6 +154,7 @@
                     <p><label>Description</label><span class="err"><?php echo $desc_err; ?></span></p>
                     <p><textarea name="description" cols="51" rows="10" placeholder="<?php echo ($offer_description !='') ? $offer_description :  'Description';?>"></textarea></p>
                     <p><label>Upload Photo max. 500kb</label><span class="err"><?php echo $img_err; ?></span></p>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $max_filesize; ?>">
                     <input type="file" name="fileUpload">
                     <br>
                     <p><button class="btn btn-primary" name="submit">Add Offer</button>

@@ -1,6 +1,6 @@
 <?php
 DEFINE ('DB_USER', 'root');
-DEFINE ('DB_PASS', 'kode1234');
+DEFINE ('DB_PASS', 'ja180570');
 DEFINE ('DB_HOST', 'localhost');
 DEFINE ('DB_NAME', 'restapi');
 
