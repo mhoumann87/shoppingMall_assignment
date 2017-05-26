@@ -51,6 +51,7 @@
                         if ($users['storenumber'] != NULL) {
 
                             $_SESSION['id'] = $users['storenumber'];
+                            $_SESSION['user_id'] = $users['id'];
 
                             if ($users['created_at'] === $users['updated_at']) {
                                 redirect('change_password.php?r=1');
@@ -61,9 +62,19 @@
 
                         } else {
                             $_SESSION['id'] = 'Admin';
-                            redirect('create_user.php');
+                            $_SESSION['user_id'] = $users['id'];
+
+
+                            if (['created_at'] === $users['updated_at']) {
+                                redirect('change_password.php?r=1');
+                            } else {
+                                redirect('create_user.php');
+                            }
+
                         }// if storenumber
 
+                        } else {
+                            $message = '<span class="err">Name and password are not correct</span>';
                         }//num rows
 
 
@@ -77,13 +88,13 @@
 
 
                 <form name="login" action="index.php" method="post">
-                    <p><label>Username</label><span class="err"><?php echo $name_err; ?></span></p>
-                    <p><input type="text" name="username" size="50" placeholder="<?php echo ($username != '') ? $username:'Username';  ?>"</p>
+                    <p><label>Name</label><span class="err"><?php echo $name_err; ?></span></p>
+                    <p><input type="text" name="username" size="50" placeholder="Name"value="<?php echo ($username != '') ? $username:'';  ?>"</p>
                     <p><label>Password</label><span class="err"><?php echo $pass_err; ?></span> </p>
                     <p><input type="password" name="password" size="50" placeholder="Password" </p>
                     <p><button class="btn btn-primary" name="submit">Log In</button></p>
                 </form>
-                <p class="err"><?php echo $message; ?></p>
+                <p><?php echo $message; ?></p>
             </div>
             <div class="col-xs-3"></div>
         </div>

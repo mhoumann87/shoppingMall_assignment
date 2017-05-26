@@ -76,3 +76,15 @@ header {
     color: #00FF00;
     font-weight: bold;
 }
+
+.err_page {
+    text-align: center;
+}
+
+.err_photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+    margin: 0 auto;
+}
