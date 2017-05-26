@@ -10,7 +10,7 @@
 
                 <?php
 
-                $store_number = 2; //TODO Have to change this for a varaible based on logged in store !!!!!!!
+                $store_number = $_SESSION['id'];
 
                 $error = [];
                 $offer_title = '';
@@ -88,7 +88,6 @@
                     $image_size = $_FILES['fileUpload']['size'];
                     $image_type = pathinfo($target_file, PATHINFO_EXTENSION);
 
-                    echo $image_type;
 
                     if (file_exists($offer_photo)) {
                         $img_err = ' An image with that name already exsits';
