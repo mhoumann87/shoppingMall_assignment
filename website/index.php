@@ -50,6 +50,7 @@
 
                             if ($users['storenumber'] != NULL) {
                                 $_SESSION['id'] = $users['storenumber'];
+                                $_SESSION['user_id'] = $users['id'];
 
                                 if ($users['created_at'] === $users['updated_at']) {
                                     redirect('change_password.php?r=1');
@@ -58,7 +59,7 @@
                                 }
                             } else {
                                 $_SESSION['id'] = 'Admin';
-
+                                $_SESSION['user_id'] = $users['id'];
                                 if ($users['created_at'] === $users['updated_at']) {
                                     redirect('change_password.php?r=1');
                                 } else {
