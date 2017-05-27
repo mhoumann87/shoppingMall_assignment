@@ -1,7 +1,11 @@
 <?php require_once './includes/sessions.inc.php'; ?>
 <?php require_once './includes/connection.inc.php'; ?>
 <?php
-
+    if (!isset($_SESSION['id'])) {
+        redirect('./error401.php');
+    } else if ($_SESSION['id'] != 'Admin') {
+        redirect('./error401.php');
+    }
 ?>
 
 <?php include_once ('./includes/header.inc.php'); ?>

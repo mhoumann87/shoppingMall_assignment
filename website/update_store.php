@@ -1,6 +1,15 @@
 <?php require_once './includes/sessions.inc.php'; ?>
 <?php require_once './includes/connection.inc.php'; ?>
 
+<?php
+if (!isset($_SESSION['id'])) {
+    redirect('./error401.php');
+} else if ($_SESSION['id'] == 'Admin') {
+    redirect('./error401.php');
+}
+?>
+
+
 
 <?php include_once ('./includes/header.inc.php'); ?>
 
@@ -18,6 +27,14 @@
             $store_website = '';
             $web_err = '';
             $add_photo = 0;
+            $store_open_week = '';
+            $week_err = '';
+            $store_open_sat = '';
+            $sat_err = '';
+            $store_open_sun = '';
+            $sun_err = '';
+            $store_description = '';
+            $desc_err = '';
             $max_filesize = 512000;
             $err_logo = '';
 
@@ -72,6 +89,39 @@
                             $errors = 'No website';
                         }
 
+                        $store_open_week = trim($_POST['store_open_week']);
+                        $store_open_week = filter_var($store_open_week, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_week == '') {
+                            $week_err = ' You have to add a opening hours';
+                            $errors = 'No week';
+                        }
+
+                        $store_open_sat = trim($_POST['store_open_sat']);
+                        $store_open_sat = filter_var($store_open_sat, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_sat == '') {
+                            $sat_err = ' You have to add a opening hours';
+                            $errors = 'No sat';
+                        }
+
+                        $store_open_sun = trim($_POST['store_open_sun']);
+                        $store_open_sun = filter_var($store_open_sun, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_sun == '') {
+                            $sun_err = ' You have to add a opening hours';
+                            $errors = 'No sun';
+                        }
+
+                        $store_description = trim($_POST['store_description']);
+                        $store_description = filter_var($store_description, FILTER_SANITIZE_STRING);
+
+                        if ($store_description == '') {
+                            $desc_err = ' You have to add a description';
+                            $errors = 'No week';
+                        }
+
+
                         //Photo upload
                         $temp_file = $_FILES['store_logo']['tmp_name'];
                         $target_file = basename($_FILES['store_logo']['name']);
@@ -106,14 +156,15 @@
 
                         if (move_uploaded_file($temp_file, $store_logo)) {
 
-                            $sql = "INSERT INTO stores (store_number, store_name, store_logo, store_phoneno, store_website, created_at, updated_at) VALUES ('{$store_number}', '{$store_name}', '{$store_logo}','{$store_phoneno}', '{$store_website}', '{$created_at}', '{$updated_at}')";
+                            $sql = "INSERT INTO stores (store_number, store_name, store_open_week, store_open_sat, store_open_sun, store_description, store_logo, store_phoneno, store_website, created_at, updated_at) VALUES ('{$store_number}', '{$store_name}', '{$store_open_week}', '{$store_open_sat}', '{$store_open_sun}', '{$store_description}', '{$store_logo}','{$store_phoneno}', '{$store_website}', '{$created_at}', '{$updated_at}')";
                             $result = mysqli_query($conn, $sql);
 
                             if ($result) {
                                 $message = '<span class="success">Store is created</span>';
 
                             } else {
-                                $message = '<span class="err">Something went wrong, offer not uploaded. Try again</span>';
+                                echo $sql;
+                                $message = '<span class="err">Something went wrong, store not created. Try again</span>';
                             }//upload
                         } else {
                             $up_err = $_FILES['fileUpload']['error'];
@@ -146,6 +197,10 @@
                     $store_name = $store['store_name'];
                     $store_phoneno = $store['store_phoneno'];
                     $store_website = $store['store_website'];
+                    $store_open_week = $store['store_open_week'];
+                    $store_open_sat = $store['store_open_sat'];
+                    $store_open_sun = $store['store_open_sun'];
+                    $store_description = $store['store_description'];
 
                     if (isset($_POST['change'])) {
 
@@ -173,16 +228,52 @@
                             $errors = 'No website';
                         }
 
+                        $store_open_week = trim($_POST['store_open_week']);
+                        $store_open_week = filter_var($store_open_week, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_week == '') {
+                            $week_err = ' You have to add a opening hours';
+                            $errors = 'No week';
+                        }
+
+                        $store_open_sat = trim($_POST['store_open_sat']);
+                        $store_open_sat = filter_var($store_open_sat, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_sat == '') {
+                            $sat_err = ' You have to add a opening hours';
+                            $errors = 'No sat';
+                        }
+
+                        $store_open_sun = trim($_POST['store_open_sun']);
+                        $store_open_sun = filter_var($store_open_sun, FILTER_SANITIZE_STRING);
+
+                        if ($store_open_sun == '') {
+                            $sun_err = ' You have to add a opening hours';
+                            $errors = 'No sun';
+                        }
+
+                        $store_description = trim($_POST['store_description']);
+                        $store_description = filter_var($store_description, FILTER_SANITIZE_STRING);
+
+                        if ($store_description == '') {
+                            $desc_err = ' You have to add a description';
+                            $errors = 'No week';
+                        }
+
+
+
                         $updated_at = date('Y-m-d H:i:s');
 
                         if (empty($errors)) {
 
-                            $sql = "UPDATE stores SET store_name = '{$store_name}', store_phoneno = '{$store_phoneno}', store_website = '{$store_website}', updated_at = '{$updated_at}' WHERE store_number = '{$_SESSION['id']}'";
+                            $sql = "UPDATE stores SET store_name = '{$store_name}', store_open_week = '{$store_open_week}', store_open_sat = '{$store_open_sat}', store_open_sun = '{$store_open_sun}', store_description = '{$store_description}', store_phoneno = '{$store_phoneno}', store_website = '{$store_website}', updated_at = '{$updated_at}' WHERE store_number = '{$_SESSION['id']}'";
                             $result = mysqli_query($conn, $sql);
 
                             if ($result) {
                                 $message = '<span class="success">Information updated</span>';
                             } else {
+
+
                                 $message = '<span class="err">Something went wrong, please try again</span>';
                             }
 
@@ -208,6 +299,14 @@
                         <p><input type="text" name="store_phoneno" size="50" placeholder="Phone Number" value="<?php echo ($store_phoneno != '') ? $store_phoneno : '' ?>"></p>
                         <p><label>Website URL</label><span class="err"><?php echo $web_err; ?></span></p>
                         <p><input type="url" name="store_website" size="50" placeholder="Website URL" value="<?php echo ($store_website != '') ? $store_website : ''; ?>"></p>
+                        <p><label>Opening Hours Weekdays</label><span class="err"><?php echo $week_err; ?></span></p>
+                        <p><input type="text" name="store_open_week" size="50" placeholder="Opening Hours Weekdays" value="<?php echo ($store_open_week != '') ? $store_open_week : ''; ?>"></p>
+                        <p><label>Opening Hours Saturday</label><span class="err"><?php echo $sat_err; ?></span></p>
+                        <p><input type="text" name="store_open_sat" size="50" placeholder="Opening Hours Saturday" value="<?php echo ($store_open_sat != '') ? $store_open_sat : ''; ?>"></p>
+                        <p><label>Opening Hours Sunday</label><span class="err"><?php echo $sun_err; ?></span></p>
+                        <p><input type="text" name="store_open_sun" size="50" placeholder="Opening Hours Sunday" value="<?php echo ($store_open_sun != '') ? $store_open_sun : ''; ?>"></p>
+                        <p><label>Description</label><span class="err"><?php echo $desc_err; ?></span></p>
+                        <p><textarea name="store_description" cols="51" rows="10" placeholder="Description"><?php echo $store_description; ?></textarea></p>
                         <?php
                             echo ($add_photo == 1) ? '
                             <p><label>Add Logo Image max. 500kb</label><span class="err">'.$err_logo.'</span></p>

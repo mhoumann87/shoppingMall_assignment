@@ -17,6 +17,10 @@ class CreateStoresTable extends Migration
             $table->increments('store_id');
             $table->integer('store_number')->unique();
             $table->string('store_name');
+            $table->string('store_open_week');
+            $table->string('store_open_sat');
+            $table->string('store_open_sun');
+            $table->string('store_description');
             $table->string('store_logo');
             $table->string('store_phoneno');
             $table->string('store_website');

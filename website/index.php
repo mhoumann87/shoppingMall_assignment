@@ -48,35 +48,26 @@
 
                             $users = mysqli_fetch_assoc($result);
 
-                        if ($users['storenumber'] != NULL) {
+                            if ($users['storenumber'] != NULL) {
+                                $_SESSION['id'] = $users['storenumber'];
 
-                            $_SESSION['id'] = $users['storenumber'];
-                            $_SESSION['user_id'] = $users['id'];
-
-                            if ($users['created_at'] === $users['updated_at']) {
-                                redirect('change_password.php?r=1');
+                                if ($users['created_at'] === $users['updated_at']) {
+                                    redirect('change_password.php?r=1');
+                                } else {
+                                    redirect('store.php');
+                                }
                             } else {
-                                redirect('store.php');
-                            }
+                                $_SESSION['id'] = 'Admin';
 
-
-                        } else {
-                            $_SESSION['id'] = 'Admin';
-                            $_SESSION['user_id'] = $users['id'];
-
-
-                            if (['created_at'] === $users['updated_at']) {
-                                redirect('change_password.php?r=1');
-                            } else {
-                                redirect('create_user.php');
-                            }
-
-                        }// if storenumber
-
+                                if ($users['created_at'] === $users['updated_at']) {
+                                    redirect('change_password.php?r=1');
+                                } else {
+                                    redirect('create_user.php');
+                                }
+                            }// if storenumber
                         } else {
                             $message = '<span class="err">Name and password are not correct</span>';
                         }//num rows
-
 
 
                     }//empty errors
