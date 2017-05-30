@@ -16,6 +16,8 @@ if (!isset($_SESSION['id'])) {
     $sql = "SELECT * FROM stores WHERE store_number = '{$_SESSION['id']}'";
     $result = mysqli_query($conn, $sql);
 
+
+
     if (mysqli_num_rows($result) == 1) {
 
         $info = mysqli_fetch_assoc($result);

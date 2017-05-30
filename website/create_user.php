@@ -13,7 +13,7 @@
 <main class="container">
     <div class="jumbotron">
 
-        <h2>Log in</h2>
+        <h2>Create new user</h2>
         <div class="row">
             <div class="col-xs-3"></div>
             <div class="col-xs-6">
@@ -64,7 +64,9 @@
                     }
 
                     //Hardcoded password, user will be forced to change first time they login
-                    $password = '1234';
+                    $password = hashPassword('1234');
+
+
 
                     $function = $_POST['function'];
 
@@ -90,7 +92,7 @@
                     if (empty($errors)) {
 
 
-                        $sql = "INSERT INTO users (name, email, password, function, storenumber, created_at, updated_at) VALUES ('{$name}', '{$email}', '{$password}', '{$function}', {$storenumber}, '{$created_at}', '{$updated_at}')";
+                       $sql = "INSERT INTO users (name, email, password, function, storenumber, created_at, updated_at) VALUES ('{$name}', '{$email}', '{$password}', '{$function}', {$storenumber}, '{$created_at}', '{$updated_at}')";
                         $result = mysqli_query($conn, $sql);
 
                         if ($result) {

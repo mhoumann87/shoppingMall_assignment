@@ -57,7 +57,9 @@
                     if ($password == $pwd['password']) {
                         $pass1_err = ' You have to choose a new password';
                         $errors = 'Same password';
-                    }
+                    } else {
+
+                    }$password = hashPassword($password);
 
                     $updated_at = date('Y-m-d H:i:s');
 
@@ -68,6 +70,7 @@
 
                         if ($result) {
                             $message = '<span class="success">Password is changed</span>';
+
                         } else {
                             $message = '<span class="err">Something went wrong, please try again</span>';
                         }
