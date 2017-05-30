@@ -41,37 +41,43 @@
 
                     if (empty($errors)) {
 
-                        $sql = "SELECT * FROM users WHERE name='{$username}' AND password = '{$password}'";
+
+
+                        $sql = "SELECT * FROM users WHERE name='{$username}'";
                         $result = mysqli_query($conn, $sql);
 
-                        if (mysqli_num_rows($result) == 1) {
 
                             $users = mysqli_fetch_assoc($result);
 
-                            if ($users['storenumber'] != NULL) {
-                                $_SESSION['id'] = $users['storenumber'];
-                                $_SESSION['user_id'] = $users['id'];
 
-                                if ($users['created_at'] === $users['updated_at']) {
-                                    redirect('change_password.php?r=1');
+                            if (mysqli_num_rows($result) == 1 && checkPassword($password, $users['password'])) {
+
+                                if ($users['storenumber'] != NULL) {
+                                    $_SESSION['id'] = $users['storenumber'];
+                                    $_SESSION['user_id'] = $users['id'];
+
+
+                                    if ($users['created_at'] === $users['updated_at']) {
+                                        redirect('change_password.php?r=1');
+
+                                    } else {
+                                        redirect('store.php');
+                                    }
                                 } else {
-                                    redirect('store.php');
-                                }
+                                    $_SESSION['id'] = 'Admin';
+                                    $_SESSION['user_id'] = $users['id'];
+                                    if ($users['created_at'] === $users['updated_at']) {
+                                        redirect('change_password.php?r=1');
+                                    } else {
+                                        redirect('create_user.php');
+                                    }
+                                }// if storenumber
                             } else {
-                                $_SESSION['id'] = 'Admin';
-                                $_SESSION['user_id'] = $users['id'];
-                                if ($users['created_at'] === $users['updated_at']) {
-                                    redirect('change_password.php?r=1');
-                                } else {
-                                    redirect('create_user.php');
-                                }
-                            }// if storenumber
-                        } else {
-                            $message = '<span class="err">Name and password are not correct</span>';
-                        }//num rows
+                                $message = '<span class="err">Name and password are not correct</span>';
+                            }//num rows
 
 
-                    }//empty errors
+                    }   //empty errors
 
                 }//submit
 

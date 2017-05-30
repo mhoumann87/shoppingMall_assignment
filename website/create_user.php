@@ -64,7 +64,7 @@
                     }
 
                     //Hardcoded password, user will be forced to change first time they login
-                    $password = hashPassword('1234');
+                    hashPassword($password = '1234');
 
 
 
